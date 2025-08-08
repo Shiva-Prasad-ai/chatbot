@@ -1,20 +1,24 @@
+# Copyright (c) 2025 Shiva Prasad M.R
+# All Rights Reserved.
+# This code is proprietary and may not be reproduced without permission.
+
 import streamlit as st
 import google.generativeai as genai
 import qrcode
 from io import BytesIO
 import time
 
-# ---- Gemini API Setup ----
+
 genai.configure(api_key="AIzaSyCMS-6P84LhtuJI960pvF4kaXhIue6KHp8")
 model = genai.GenerativeModel("gemini-2.5-pro")
 
 st.title("Aira Den 🤖")
 
-# ---- Session State for Chat ----
+
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# ---- Display Chat History ----
+
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         if message.get("type") == "qr":
@@ -22,13 +26,13 @@ for message in st.session_state.messages:
         else:
             st.markdown(message["content"])
 
-# ---- Get User Input ----
+
 if prompt := st.chat_input("Ask me anything... (use /qr <link>)"):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    # ---- QR Code Command ----
+    
     if prompt.lower().startswith("/qr "):
         link = prompt[4:].strip()
         if not link:
@@ -54,7 +58,7 @@ if prompt := st.chat_input("Ask me anything... (use /qr <link>)"):
                 })
 
     else:
-        # ---- Thinking Animation ----
+        
         with st.chat_message("assistant"):
             with st.spinner("🍳 Your response is cooking..."):
                 time.sleep(1.5)  # Simulate "thinking"
